@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'src/data/datasources/pokeapi_datasource.dart';
-import 'src/data/repositories/pokemon_repository_impl.dart';
-import 'src/domain/usecases/get_pokemons_usecase.dart';
-import 'src/presentation/viewmodels/pokemon_viewmodel.dart';
-import 'src/presentation/routes/app_routes.dart';
+import 'package:tarea_api_app/src/data/datasources/zelda_datasource.dart';
+import 'package:tarea_api_app/src/data/repositories/zelda_item_repository_impl.dart';
+import 'package:tarea_api_app/src/domain/usecases/get_zelda_items_usecase.dart';
+import 'package:tarea_api_app/src/presentation/routes/app_routes.dart';
+import 'package:tarea_api_app/src/presentation/viewmodels/zelda_items_view_model.dart';
 
 void main() {
-  final datasource = PokeApiDataSource();
-  final repository = PokemonRepositoryImpl(datasource);
-  final usecase = GetPokemonsUseCase(repository);
+  final datasource = ZeldaDatasource();
+  final repository = ZeldaItemRepositoryImpl(datasource);
+  final usecase = GetZeldaItemsUsecase(repository);
 
   runApp(MyApp(usecase: usecase));
 }
 
 class MyApp extends StatelessWidget {
-  final GetPokemonsUseCase usecase;
+  final GetZeldaItemsUsecase usecase;
 
   const MyApp({super.key, required this.usecase});
 
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => PokemonViewModel(usecase),
+          create: (_) => ZeldaItemsViewModel(usecase),
         ),
       ],
       child: MaterialApp(

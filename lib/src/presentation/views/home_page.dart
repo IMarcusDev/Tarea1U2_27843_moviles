@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../viewmodels/pokemon_viewmodel.dart';
+import 'package:tarea_api_app/src/presentation/viewmodels/zelda_items_view_model.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,13 +14,13 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     Future.microtask(() =>
-        Provider.of<PokemonViewModel>(context, listen: false).loadPokemons()
+        Provider.of<ZeldaItemsViewModel>(context, listen: false).loadZeldaItems()
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final vm = Provider.of<PokemonViewModel>(context);
+    final vm = Provider.of<ZeldaItemsViewModel>(context);
 
     if (vm.loading) {
       return const Scaffold(
@@ -30,16 +29,15 @@ class _HomePageState extends State<HomePage> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text("PokéAPI - MVVM + Provider")),
+      appBar: AppBar(title: const Text("ZeldaItemsAPI - MVVM + Provider")),
       body: ListView.builder(
-        itemCount: vm.pokemons.length,
+        itemCount: vm.items.length,
         itemBuilder: (_, index) {
-          final p = vm.pokemons[index];
+          final p = vm.items[index];
 
           return ListTile(
-            leading: Image.network(p.imageUrl),
-            title: Text(p.name.toUpperCase()),
-            subtitle: Text("ID: ${p.id}"),
+            title: Text('${p.id} - ${p.name.toUpperCase()}'),
+            subtitle: Text(p.description),
             onTap: () {
               Navigator.pushNamed(context, "/detalle", arguments: p);
             },

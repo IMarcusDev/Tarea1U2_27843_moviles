@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
-import '../../domain/entities/pokemon.dart';
+import 'package:tarea_api_app/src/domain/entities/zelda_item.dart';
+
 
 class DetallePage extends StatelessWidget {
   const DetallePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final Pokemon pokemon =
-    ModalRoute.of(context)!.settings.arguments as Pokemon;
+    final ZeldaItem item = ModalRoute.of(context)!.settings.arguments as ZeldaItem;
 
     return Scaffold(
-      appBar: AppBar(title: Text(pokemon.name.toUpperCase())),
+      appBar: AppBar(title: Text(item.name.toUpperCase())),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          spacing: 18,
           children: [
-            Image.network(pokemon.imageUrl, width: 150),
-            const SizedBox(height: 20),
-            Text("ID: ${pokemon.id}", style: const TextStyle(fontSize: 22)),
-            const SizedBox(height: 10),
-            Text(pokemon.name.toUpperCase(),
-                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            Text("ID: ${item.id}", style: const TextStyle(fontSize: 22)),
+            Text(
+              item.name.toUpperCase(),
+              style: const TextStyle(
+                fontSize: 24, fontWeight: FontWeight.bold
+              )
+            ),
+            Text(item.description)
           ],
         ),
       ),
