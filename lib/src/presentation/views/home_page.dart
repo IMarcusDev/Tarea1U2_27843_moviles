@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
               .toList();
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Zelda Items'), centerTitle: true),
+      appBar: AppBar(title: const Text('Zelda'), centerTitle: true),
       body: vm.loading
           ? const Center(child: CircularProgressIndicator())
           : vm.errorMessage != null
