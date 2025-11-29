@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tarea_api_app/src/presentation/viewmodels/zelda_items_view_model.dart';
 import 'package:tarea_api_app/src/presentation/widgets/item_card.dart';
 import 'package:tarea_api_app/src/presentation/widgets/search_bar.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -39,6 +40,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final vm = Provider.of<ZeldaItemsViewModel>(context);
+    final theme = Theme.of(context);
 
     // Filter items according to the search query
     final items = vm.items;
@@ -52,7 +54,28 @@ class _HomePageState extends State<HomePage> {
               .toList();
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Zelda'), centerTitle: true),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Use an SVG triforce icon located in assets/images/ and color it to match the title
+            SvgPicture.asset(
+              'assets/images/IconoTrifuerza.svg',
+              width: 20,
+              height: 20,
+              color: theme.appBarTheme.iconTheme?.color ?? theme.colorScheme.secondary,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              'Zelda',
+              style: TextStyle(
+                color: theme.appBarTheme.titleTextStyle?.color ?? theme.colorScheme.secondary,
+              ),
+            ),
+          ],
+        ),
+      ),
       body: vm.loading
           ? const Center(child: CircularProgressIndicator())
           : vm.errorMessage != null
