@@ -7,7 +7,6 @@ import 'package:tarea_api_app/src/domain/entities/zelda_item.dart';
 class ItemCard extends StatelessWidget {
   final ZeldaItem item;
   final VoidCallback? onTap;
-  // cache the asset manifest keys to avoid repeated loads
   static Future<Set<String>>? _assetKeysFuture;
 
   const ItemCard({super.key, required this.item, this.onTap});
@@ -17,37 +16,33 @@ class ItemCard extends StatelessWidget {
     final theme = Theme.of(context);
 
     return InkWell(
-      onTap:
-          onTap ??
-          () => Navigator.pushNamed(context, '/detalle', arguments: item),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(14),
-        child: Container(
-          height: double.infinity,
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surface,
-            borderRadius: BorderRadius.circular(14),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withAlpha(25),
-                blurRadius: 6,
-                offset: const Offset(0, 3),
-              ),
-            ],
+      onTap: onTap ?? () => Navigator.pushNamed(context, '/detalle', arguments: item),
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: theme.colorScheme.primary.withOpacity(0.1),
+            width: 1,
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
           child: Stack(
             fit: StackFit.expand,
             children: [
-              // Background image (from assets) only if present in AssetManifest,
-              // this prevents 404 errors on web when the file is missing.
               FutureBuilder<Set<String>>(
                 future: _assetKeysFuture ??= rootBundle
                     .loadString('AssetManifest.json')
-                    .then(
-                      (s) => (jsonDecode(s) as Map).keys
-                          .map((k) => k.toString())
-                          .toSet(),
-                    ),
+                    .then((s) => (jsonDecode(s) as Map).keys.map((k) => k.toString()).toSet()),
                 builder: (context, snap) {
                   final candidates = <String>[
                     'assets/images/${item.id}.png',
@@ -63,11 +58,10 @@ class ItemCard extends StatelessWidget {
                     'assets/images/img1.webp',
                   ];
 
-                  if (snap.connectionState == ConnectionState.done &&
-                      snap.hasData) {
+                  if (snap.connectionState == ConnectionState.done && snap.hasData) {
                     final keys = snap.data!;
-                    // find first candidate that exists
                     String? found;
+                    
                     for (final c in candidates) {
                       if (keys.contains(c)) {
                         found = c;
@@ -75,7 +69,6 @@ class ItemCard extends StatelessWidget {
                       }
                     }
 
-                    // if not found, try fallback img1
                     if (found == null) {
                       for (final f in fallbackCandidates) {
                         if (keys.contains(f)) {
@@ -88,57 +81,55 @@ class ItemCard extends StatelessWidget {
                     if (found != null) {
                       return Positioned.fill(
                         child: ImageFiltered(
-                          imageFilter: ui.ImageFilter.blur(
-                            sigmaX: 2,
-                            sigmaY: 2,
-                          ),
-                          child: Stack(
-                            fit: StackFit.expand,
-                            children: [
-                              ColorFiltered(
-                                colorFilter: ColorFilter.mode(
-                                  Color.fromRGBO(0, 0, 0, 0.5),
-                                  BlendMode.dstIn,
-                                ),
-                                child: Image.asset(found, fit: BoxFit.cover),
-                              ),
-                            ],
+                          imageFilter: ui.ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+                          child: ColorFiltered(
+                            colorFilter: const ColorFilter.mode(
+                              Color.fromRGBO(0, 0, 0, 0.5),
+                              BlendMode.dstIn,
+                            ),
+                            child: Image.asset(found, fit: BoxFit.cover),
                           ),
                         ),
                       );
                     }
                   }
 
-                  // fallback colored background
                   return Positioned.fill(
                     child: Container(
-                      color: theme.colorScheme.primary.withAlpha(18),
+                      color: theme.colorScheme.primary.withOpacity(0.08),
                     ),
                   );
                 },
               ),
 
-              // Center avatar / icon
               Align(
                 alignment: Alignment.center,
                 child: Hero(
                   tag: item.id,
-                  child: CircleAvatar(
-                    radius: 30,
-                    backgroundColor: theme.colorScheme.primary.withAlpha(51),
-                    child: Text(
-                      item.name.isNotEmpty ? item.name[0].toUpperCase() : '?',
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: theme.colorScheme.primary,
-                        fontWeight: FontWeight.bold,
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: theme.colorScheme.primary.withOpacity(0.2),
+                      border: Border.all(
+                        color: theme.colorScheme.primary.withOpacity(0.4),
+                        width: 2,
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        item.name.isNotEmpty ? item.name[0].toUpperCase() : '?',
+                        style: TextStyle(
+                          fontSize: 24,
+                          color: theme.colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-
-              // Bottom gradient and texts
               Positioned(
                 left: 0,
                 right: 0,
@@ -151,8 +142,9 @@ class ItemCard extends StatelessWidget {
                       end: Alignment.bottomCenter,
                       colors: [
                         Colors.transparent,
-                        theme.colorScheme.surface.withAlpha(200),
+                        Colors.black.withOpacity(0.85),
                       ],
+                      stops: const [0.0, 1.0],
                     ),
                   ),
                   child: Column(
@@ -163,18 +155,20 @@ class ItemCard extends StatelessWidget {
                         item.name,
                         style: TextStyle(
                           color: theme.colorScheme.onSurface,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                          letterSpacing: 0.5,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 6),
+                      const SizedBox(height: 4),
                       Text(
                         item.description,
                         style: TextStyle(
-                          color: theme.colorScheme.onSurface.withAlpha(200),
+                          color: theme.colorScheme.onSurfaceVariant,
                           fontSize: 11,
+                          height: 1.3,
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,

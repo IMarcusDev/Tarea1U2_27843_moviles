@@ -18,15 +18,16 @@ class ItemHero extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: theme.colorScheme.surface,
-          border: Border.all(
-            color: theme.colorScheme.secondary,
-            width: 2,
-          ),
           boxShadow: [
             BoxShadow(
-              color: theme.colorScheme.secondary.withAlpha(102),
+              color: theme.colorScheme.primary.withOpacity(0.4),
               blurRadius: 20,
-              spreadRadius: 2,
+              spreadRadius: 4,
+            ),
+            BoxShadow(
+              color: theme.colorScheme.primary.withOpacity(0.15),
+              blurRadius: 40,
+              spreadRadius: 10,
             ),
           ],
         ),
@@ -38,6 +39,7 @@ class ItemHero extends StatelessWidget {
               style: TextStyle(
                 fontSize: (size * 0.4).clamp(24, 64),
                 color: theme.colorScheme.secondary,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),

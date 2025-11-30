@@ -20,35 +20,49 @@ class DetailInfoCard extends StatelessWidget {
                 Icon(
                   Icons.info_outline,
                   color: theme.colorScheme.primary,
+                  size: 24,
                 ),
                 const SizedBox(width: 10),
-                const Text(
+                Text(
                   "Descripción",
                   style: TextStyle(
                     fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.onSurface,
                   ),
                 ),
               ],
             ),
-            const Divider(height: 30),
+            Divider(
+              height: 30,
+              color: theme.colorScheme.onSurfaceVariant.withOpacity(0.2),
+            ),
             Text(
               item.description,
-              style: const TextStyle(fontSize: 16, height: 1.5),
+              style: TextStyle(
+                fontSize: 16,
+                height: 1.6,
+                color: theme.colorScheme.onSurface,
+              ),
             ),
             const SizedBox(height: 20),
             Container(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
-                color: Colors.black26,
-                borderRadius: BorderRadius.circular(8),
+                color: theme.colorScheme.primary.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: theme.colorScheme.primary.withOpacity(0.2),
+                  width: 1,
+                ),
               ),
               child: Text(
                 'ID: ${item.id}',
                 style: TextStyle(
-                  color: Colors.grey[500],
+                  color: theme.colorScheme.onSurfaceVariant,
                   fontSize: 12,
                   fontFamily: 'Courier',
+                  letterSpacing: 0.5,
                 ),
               ),
             ),

@@ -42,7 +42,6 @@ class _HomePageState extends State<HomePage> {
     final vm = Provider.of<ZeldaItemsViewModel>(context);
     final theme = Theme.of(context);
 
-    // Filter items according to the search query
     final items = vm.items;
     final filtered = _query.trim().isEmpty
         ? items
@@ -59,7 +58,6 @@ class _HomePageState extends State<HomePage> {
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Use an SVG triforce icon located in assets/images/ and color it to match the title
             SvgPicture.asset(
               'assets/images/IconoTrifuerza.svg',
               width: 20,
